@@ -29,7 +29,7 @@ def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "4. Enter a csv file to load from"
   puts "9. Exit"
 end
 
@@ -48,7 +48,8 @@ def process(selection)
     when "3"
       save_students
     when "4"
-      load_students
+      puts "Please type the full name including .csv"
+      try_load_students(gets.chomp)
     when "9"
       exit
     else
@@ -67,8 +68,20 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def try_load_students(filename)
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+def load_students(filename)
+  puts filename
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
   @students << {name: name, cohort: cohort.to_sym}
@@ -77,12 +90,13 @@ def load_students
 end
 
 def interactive_menu
+
   loop do # print menu and ask user what to do
     print_menu
     selection = gets.chomp # read the input and save it into a variable
     process(selection)
   end
 end
-
 @students = []
+try_load_students(ARGV.first)
 interactive_menu
