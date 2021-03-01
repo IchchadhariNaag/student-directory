@@ -1,11 +1,11 @@
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just hit return twice"
-  name = gets.chomp # get the name
+  name = STDIN.gets.chomp # get the name
   while !name.empty? do # while the name is not empty, repeat this code
     @students << {name: name, cohort: :november} # add the student info hash to the array
     puts "Now we have #{@students.count} students"
-    name = gets.chomp # get another name from the user
+    name = STDIN.gets.chomp # get another name from the user
   end
   @students # return the array of students
 end
@@ -49,7 +49,7 @@ def process(selection)
       save_students
     when "4"
       puts "Please type the full name including .csv"
-      try_load_students(gets.chomp)
+      try_load_students(STDIN.gets.chomp)
     when "9"
       exit
     else
@@ -80,7 +80,6 @@ def try_load_students(filename)
 end
 
 def load_students(filename)
-  puts filename
   file = File.open(filename, "r")
   file.readlines.each do |line|
   name, cohort = line.chomp.split(',')
@@ -90,11 +89,9 @@ def load_students(filename)
 end
 
 def interactive_menu
-
   loop do # print menu and ask user what to do
     print_menu
-    selection = gets.chomp # read the input and save it into a variable
-    process(selection)
+    process(STDIN.gets.chomp)
   end
 end
 @students = []
